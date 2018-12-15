@@ -16,4 +16,4 @@ A simple [The Movie Database](https://www.themoviedb.org/) API wrapper for Dart.
 
 ## License
 
-*MIT License* - [https://opensource.org/licenses/MIT](https://opensource.org/licenses/MIT)
+This API wrapper is licensed under the [MIT License](https://github.com/code-shoily/tmdb_dart/blob/master/LICENSE.txt)
