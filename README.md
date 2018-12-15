@@ -1,4 +1,19 @@
-A sample command-line application.
+# tmdb-dart
 
-Created from templates made available by Stagehand under a BSD-style
-[license](https://github.com/dart-lang/stagehand/blob/master/LICENSE).
+## A wrapper for the The Movie Database API
+
+A simple [The Movie Database](https://www.themoviedb.org/) API wrapper for Dart.
+
+## Features
+
+## Installation
+
+## Usage
+
+## Documentation
+
+## Contribute
+
+## License
+
+*MIT License* - [https://opensource.org/licenses/MIT](https://opensource.org/licenses/MIT)
