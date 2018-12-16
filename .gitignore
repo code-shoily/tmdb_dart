@@ -1,3 +1,6 @@
+# API keys
+lib/api_key.dart
+
 # Edito Files
 .idea/
 .vscode/

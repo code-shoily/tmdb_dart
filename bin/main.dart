@@ -1,5 +1,4 @@
-import 'package:tmdb_dart/tmdb_dart.dart' as tmdb_dart;
+import 'package:tmdb_dart/config/tokens.dart';
+import 'package:tmdb_dart/core/api.dart';
 
-main(List<String> arguments) =>
-    print('Hello world: ${tmdb_dart.calculate()}!');
-
+main(List<String> arguments) async {}
