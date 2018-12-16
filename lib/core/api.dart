@@ -40,11 +40,21 @@ class SessionInformation {
 }
 
 class TmdbApi {
+  /// The base URL for this API
   final String _baseUrl;
+
+  /// API Key (in this case v3)
   final String _apiKey;
+
+  /// Do we use HTTPS?
   final bool _useHttps;
 
+  /// The session infromation that holds all the information of the session
   SessionInformation _sessionInformation;
+
+  /// Readonly [SessionInformation] that returns the auth related
+  /// tokens for [this]
+  Map get sessionInformation => _sessionInformation?.asMap;
 
   @override
   String toString() => this._sessionInformation.toString();
@@ -52,9 +62,11 @@ class TmdbApi {
   TmdbApi(this._apiKey, [this._useHttps = true])
       : _baseUrl = "api.themoviedb.org/3";
 
+  /// Builds a Tmdb URL with API key baked in.
   _buildUrl([path = ""]) =>
       "http${_useHttps ? "s" : ""}://${_baseUrl}${path}?api_key=${_apiKey}";
 
+  /// Performs a [http.get] and returns the response as a dart [Map]
   Future<Map<String, dynamic>> mapFromGet(String path) async {
     var _client = http.Client();
     var response = await _client.get(_buildUrl(path));
@@ -63,6 +75,7 @@ class TmdbApi {
     return jsonDecode(response.body);
   }
 
+  /// Performs a [http.post] and returns the response as a dart [Map]
   Future<Map<String, dynamic>> mapFromPost(
       String path, Map<String, String> payload) async {
     var _client = http.Client();
@@ -72,6 +85,7 @@ class TmdbApi {
     return jsonDecode(response.body);
   }
 
+  /// Performs a [http.delete] and returns the response as a dart [Map]
   Future<Map<String, dynamic>> mapFromDelete(String path) async {
     var _client = http.Client();
     var response = await _client.delete(_buildUrl(path));
@@ -80,14 +94,16 @@ class TmdbApi {
     return jsonDecode(response.body);
   }
 
+  /// Creates a new unauthorized request token.
   Future<void> _createRequestToken() async {
     _sessionInformation = SessionInformation.createFromMap(
-        await mapFromGet(accountPath.CreateNewToken));
+        await mapFromGet(accountPath.createNewToken));
   }
 
+  /// Validates/authorizes a request token from username and password of a user.
   Future<void> _validateWithLogin(String username, String password) async {
     if (_sessionInformation?.requestToken == null) throw "NO_REQUEST_TOKEN";
-    var result = await mapFromPost(accountPath.ValidateWithLogin, {
+    var result = await mapFromPost(accountPath.validateWithLogin, {
       "username": username,
       "password": password,
       "request_token": _sessionInformation.requestToken
@@ -101,8 +117,9 @@ class TmdbApi {
     }
   }
 
+  /// Creates a new session token based off of an authorized request token.
   Future<void> _createNewSession() async {
-    var result = await mapFromPost(accountPath.CreateNewSession,
+    var result = await mapFromPost(accountPath.createNewSession,
         {"request_token": _sessionInformation?.requestToken});
     if (result.containsKey("success") && result["success"] == true)
       _sessionInformation.sessionId = result["session_id"];
@@ -112,20 +129,25 @@ class TmdbApi {
     }
   }
 
+  /// Authenticates as guest.
   Future<void> loginAsGuest() async {
     _sessionInformation = SessionInformation.createFromMap(
-        await mapFromGet(accountPath.CreateNewGuestSession));
+        await mapFromGet(accountPath.createNewGuestSession));
   }
 
+  /// Performs the login action of a user.
+  /// It starts with creating a token, then it authorizes the token
+  /// with username/password and finally creates a new session based
+  /// on that token. The user has 1 hour to create a session ID from the token.
   Future<void> login(String username, String password) async {
     await _createRequestToken();
     await _validateWithLogin(username, password);
     await _createNewSession();
   }
 
-  /// Logs out [deletes] the session
+  /// Logs out deletes the session
   Future<void> logout() async {
     _sessionInformation = null;
-    await mapFromDelete(accountPath.SessionRoot);
+    await mapFromDelete(accountPath.sessionRoot);
   }
 }
