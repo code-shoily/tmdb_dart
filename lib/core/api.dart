@@ -1,6 +1,6 @@
 import "dart:convert";
 import "package:http/http.dart" as http;
-
+import "package:tmdb_dart/core/models.dart";
 import "package:tmdb_dart/config/account.dart" as accountPath;
 
 class SessionInformation {
@@ -76,6 +76,15 @@ class TmdbApi {
   }
 
   /// Performs a [http.post] and returns the response as a dart [Map]
+  // Sometimes, specially in list APIs there can be list instead of object.
+  Future<List<dynamic>> listFromGet(String path) async {
+    var _client = http.Client();
+    var response = await _client.get(_buildUrl(path));
+    _client.close();
+
+    return jsonDecode(response.body);
+  }
+
   Future<Map<String, dynamic>> mapFromPost(
       String path, Map<String, String> payload) async {
     var _client = http.Client();
@@ -149,5 +158,11 @@ class TmdbApi {
   Future<void> logout() async {
     _sessionInformation = null;
     await mapFromDelete(accountPath.sessionRoot);
+  }
+
+  Future<Movie> getMovie(int movieID) async {
+    return this
+        .mapFromGet("/movie/${movieID}")
+        .then((val) => new Movie.fromJSON(val));
   }
 }
