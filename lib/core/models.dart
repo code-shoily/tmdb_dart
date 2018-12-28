@@ -1,8 +1,99 @@
+// Account models.
+
+
+class Gravater {
+  String hash;
+
+  Gravater({this.hash});
+
+  Gravater.fromJSON(Map<String, dynamic> data){
+      this.hash = data['hash'];
+  }
+}
+
+class Avater {
+  Gravater gravater;
+
+  Avater({this.gravater});
+
+  Avater.fromJSON(Map<String, dynamic> data){
+      this.gravater = new Gravater.fromJSON(data['gravater']);
+  }
+}
+
+class AccountDetail {
+  // Account Details
+  //
+  // https://developers.themoviedb.org/3/account/get-account-details
+  Avater avater;
+  int id;
+  String ISO_639_1;
+  String ISO_3166_1;
+  String name;
+  bool includeAdult;
+  String username;
+
+  AccountDetail({this.avater, this.id, this.ISO_639_1, this.ISO_3166_1, this.name, this.includeAdult, this.username});
+
+  AccountDetail.fromJSON(Map<String, dynamic> data){
+    this.avater = new Avater.fromJSON(data['avater']);
+    this.id = data['id'];
+    this.ISO_639_1 = data['iso_639_1'];
+    this.ISO_3166_1 = data['iso_3166_1'];
+    this.name = data['name'];
+    this.includeAdult = data['include_adult'];
+    this.username = data['username'];
+  }
+}
+
+class MovieList {
+  String description;
+  int favoriteCount;
+  int id;
+  int itemCount;
+  String ISO_639_1;
+  String listType;
+  String name;
+  String posterPath;
+
+  MovieList({this.description, this.favoriteCount, this.id, this.itemCount, this.ISO_639_1, this.listType, this.name, this.posterPath});
+
+  MovieList.fromJSON(Map<String, dynamic> data){
+    this.description = data['description'];
+    this.favoriteCount = data['favoriteCount'];
+    this.id = data['id'];
+    this.itemCount = data['item_count'];
+    this.ISO_639_1 = data['iso_639_1'];
+    this.listType = data['list_type'];
+    this.name = data['name'];
+    this.posterPath = data['poster_path'];
+  }
+}
+
+class MovieListResponse {
+  int page;
+  List<MovieList> results;
+  int totalPages;
+  int totalResults;
+
+
+  MovieListResponse({this.page, this.results, this.totalPages, this.totalResults});
+
+  MovieListResponse.fromJSON(Map<String, dynamic> data){
+    this.page = data['page'];
+    this.totalPages = data['total_pages'];
+    this.totalResults = data['total_results'];
+
+    this.results = List<MovieList>.of(data['results'].map((item) => new Movie.fromJSON(item)));
+  }
+}
+
+
 class Genre {
   int id;
   String name;
 
-  Genre(this.id, this.name);
+  Genre({this.id, this.name});
 
   Genre.fromJSON(Map<String, dynamic> data) {
     this.id = data["id"];
