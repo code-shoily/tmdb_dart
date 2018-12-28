@@ -70,36 +70,31 @@ class MovieList {
   }
 }
 
-class MovieListResponse {
+
+abstract class Page {
   int page;
-  List<MovieList> results;
   int totalPages;
   int totalResults;
 
+  Page(this.page, this.totalPages, this.totalResults);
+}
 
-  MovieListResponse({this.page, this.results, this.totalPages, this.totalResults});
+class MovieListResponse extends Page {
+  List<MovieList> results;
 
-  MovieListResponse.fromJSON(Map<String, dynamic> data){
-    this.page = data['page'];
-    this.totalPages = data['total_pages'];
-    this.totalResults = data['total_results'];
+  MovieListResponse({int page, this.results, int totalPages, int totalResults}) : super(page, totalPages, totalResults);
 
+  MovieListResponse.fromJSON(Map<String, dynamic> data): super(data['page'], data['total_pages'], data['total_results']) {
     this.results = List<MovieList>.of(data['results'].map((item) => new MovieList.fromJSON(item)));
   }
 }
 
-class FavoriteMovies {
-  int page;
+class FavoriteMovies extends Page {
   List<Movie> results;
-  int totalPages;
-  int totalResults;
 
-  FavoriteMovies({this.page, this.results, this.totalPages, this.totalResults});
+  FavoriteMovies({int page, this.results, int totalPages, int totalResults}) : super(page, totalPages, totalResults);
 
-  FavoriteMovies.fromJSON(Map<String, dynamic> data){
-    this.page = data['page'];
-    this.totalPages = data['total_pages'];
-    this.totalResults = data['total_results'];
+  FavoriteMovies.fromJSON(Map<String, dynamic> data): super(data['page'], data['total_pages'], data['total_results']){
     this.results = List<Movie>.of(data['results'].map((item) => new Movie.fromJSON(item)));
   }
 }
@@ -156,6 +151,86 @@ class ProductionCompany {
     this.originCountry = data["origin_country"];
   }
 }
+
+class Keyword {
+  int id;
+  String name;
+
+  Keyword({this.id, this.name});
+
+  Keyword.fromJSON(Map<String, dynamic> data){
+    this.id = data['id'];
+    this.name = data['name'];
+  }
+}
+
+
+class Network {
+  String headquarters;
+  String homepage;
+  int id;
+  String name;
+  String originCountry;
+
+  Network({this.headquarters, this.homepage, this.id, this.name, this.originCountry});
+
+  Network.fromJSON(Map<String, dynamic> data){
+    this.headquarters = data['headquarters'];
+    this.homepage = data['homepage'];
+    this.id = data['id'];
+    this.name = data['name'];
+    this.originCountry = data['origin_country'];
+  }
+}
+
+class NetworkAlternativeName {
+  String name;
+  String type;
+
+  NetworkAlternativeName({this.name, this.type});
+
+  NetworkAlternativeName.fromJSON(Map<String, dynamic> data) {
+    this.name = data['name'];
+    this.type = data['type'];
+  }
+}
+
+class NetworkAlternativeNames {
+  int id;
+  List<NetworkAlternativeName> results;
+
+  NetworkAlternativeNames({this.id, this.results});
+
+  NetworkAlternativeNames.fromJSON(Map<String, dynamic> data){
+    this.id = data['id'];
+    this.results = List<NetworkAlternativeName>.of(data['results'].map((val) => NetworkAlternativeName.fromJSON(val)));
+  }
+
+}
+
+
+abstract class Image {
+  num aspectRatio;
+  String filePath;
+  int height;
+  num voteAverage;
+  num voteCount;
+  int width;
+
+  Image(this.aspectRatio, this.filePath, this.height, this.voteAverage, this.voteCount, this.width);
+}
+
+
+class Logo extends Image {
+  String fileType;
+
+  Logo({num aspectRatio, String filePath, int height, num voteAverage, num voteCount, num width, this.fileType}) : super(aspectRatio, filePath, height, voteAverage, voteCount, width);
+
+  Logo.fromJSON(Map<String, dynamic> data) : super(data['aspect_ratio'], data['file_path'], data['height'], data['vote_average'], data['vote_count'], data['width']){
+    this.fileType = data['file_type'];
+  }
+}
+
 
 class Movie {
   // Reference: https://developers.themoviedb.org/3/movies/get-latest-movie
