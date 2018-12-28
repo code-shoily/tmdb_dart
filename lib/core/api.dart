@@ -49,6 +49,9 @@ class TmdbApi {
   /// Do we use HTTPS?
   final bool _useHttps;
 
+  // language
+  String language;
+
   /// The session infromation that holds all the information of the session
   SessionInformation _sessionInformation;
 
@@ -59,13 +62,14 @@ class TmdbApi {
   @override
   String toString() => this._sessionInformation.toString();
 
-  TmdbApi(this._apiKey, [this._useHttps = true])
+  TmdbApi(this._apiKey, [this._useHttps = true, this.language = 'en-US'])
       : _baseUrl = "api.themoviedb.org/3";
 
   String _buildParams(Map<String, String> params){
     if(params == null){
       return '';
     }
+    params['language'] ??= this.language;
     return params.keys.map((k) => "$k=${params[k]}").join('&');
   }
 

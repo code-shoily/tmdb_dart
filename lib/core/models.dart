@@ -84,7 +84,23 @@ class MovieListResponse {
     this.totalPages = data['total_pages'];
     this.totalResults = data['total_results'];
 
-    this.results = List<MovieList>.of(data['results'].map((item) => new Movie.fromJSON(item)));
+    this.results = List<MovieList>.of(data['results'].map((item) => new MovieList.fromJSON(item)));
+  }
+}
+
+class FavoriteMovies {
+  int page;
+  List<Movie> results;
+  int totalPages;
+  int totalResults;
+
+  FavoriteMovies({this.page, this.results, this.totalPages, this.totalResults});
+
+  FavoriteMovies.fromJSON(Map<String, dynamic> data){
+    this.page = data['page'];
+    this.totalPages = data['total_pages'];
+    this.totalResults = data['total_results'];
+    this.results = List<Movie>.of(data['results'].map((item) => new Movie.fromJSON(item)));
   }
 }
 
