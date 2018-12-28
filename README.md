@@ -13,6 +13,8 @@ A simple [The Movie Database](https://www.themoviedb.org/) API wrapper for Dart.
 ```dart
 final String apiKeyV3 = "<your v3 api key>";
 final String apiKeyV4 = "<your v4 api key>";
+final String username = "<your username>";
+final String password = "<your password";
 ```
 
 This file is not commited to the repository as it contains your API keys.
