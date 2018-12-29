@@ -65,8 +65,8 @@ class TmdbApi {
   TmdbApi(this._apiKey, [this._useHttps = true, this.language = 'en-US'])
       : _baseUrl = "api.themoviedb.org/3";
 
-  String _buildParams(Map<String, String> params){
-    if(params == null){
+  String _buildParams(Map<String, String> params) {
+    if (params == null) {
       return '';
     }
     params['language'] ??= this.language;
@@ -178,14 +178,17 @@ class TmdbApi {
   }
 
   Future<AccountDetail> getAccountDetail() async {
-      return this.mapFromGet("/account",
-      {'session_id': this.sessionInformation['sessionId']})
-      .then((val) => new AccountDetail.fromJSON(val));
+    return this.mapFromGet("/account", {
+      'session_id': this.sessionInformation['sessionId']
+    }).then((val) => new AccountDetail.fromJSON(val));
   }
 
-  Future<MovieListResponse> getMovieList(int id, {String lang: '', int page: 1}) async {
-      return this.mapFromGet("/account/$id/lists",
-      {"language": lang, "page": page, "session_id": this.sessionInformation['sessionId']})
-      .then((val) => new MovieListResponse.fromJSON(val));
+  Future<MovieListResponse> getMovieList(int id,
+      {String lang: '', int page: 1}) async {
+    return this.mapFromGet("/account/$id/lists", {
+      "language": lang,
+      "page": page,
+      "session_id": this.sessionInformation['sessionId']
+    }).then((val) => new MovieListResponse.fromJSON(val));
   }
 }

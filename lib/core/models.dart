@@ -1,13 +1,12 @@
 // Account models.
 
-
 class Gravater {
   String hash;
 
   Gravater({this.hash});
 
-  Gravater.fromJSON(Map<String, dynamic> data){
-      this.hash = data['hash'];
+  Gravater.fromJSON(Map<String, dynamic> data) {
+    this.hash = data['hash'];
   }
 }
 
@@ -16,8 +15,8 @@ class Avater {
 
   Avater({this.gravater});
 
-  Avater.fromJSON(Map<String, dynamic> data){
-      this.gravater = new Gravater.fromJSON(data['gravater']);
+  Avater.fromJSON(Map<String, dynamic> data) {
+    this.gravater = new Gravater.fromJSON(data['gravater']);
   }
 }
 
@@ -33,9 +32,16 @@ class AccountDetail {
   bool includeAdult;
   String username;
 
-  AccountDetail({this.avater, this.id, this.ISO_639_1, this.ISO_3166_1, this.name, this.includeAdult, this.username});
+  AccountDetail(
+      {this.avater,
+      this.id,
+      this.ISO_639_1,
+      this.ISO_3166_1,
+      this.name,
+      this.includeAdult,
+      this.username});
 
-  AccountDetail.fromJSON(Map<String, dynamic> data){
+  AccountDetail.fromJSON(Map<String, dynamic> data) {
     this.avater = new Avater.fromJSON(data['avater']);
     this.id = data['id'];
     this.ISO_639_1 = data['iso_639_1'];
@@ -56,9 +62,17 @@ class MovieList {
   String name;
   String posterPath;
 
-  MovieList({this.description, this.favoriteCount, this.id, this.itemCount, this.ISO_639_1, this.listType, this.name, this.posterPath});
+  MovieList(
+      {this.description,
+      this.favoriteCount,
+      this.id,
+      this.itemCount,
+      this.ISO_639_1,
+      this.listType,
+      this.name,
+      this.posterPath});
 
-  MovieList.fromJSON(Map<String, dynamic> data){
+  MovieList.fromJSON(Map<String, dynamic> data) {
     this.description = data['description'];
     this.favoriteCount = data['favoriteCount'];
     this.id = data['id'];
@@ -69,7 +83,6 @@ class MovieList {
     this.posterPath = data['poster_path'];
   }
 }
-
 
 abstract class Page {
   int page;
@@ -82,23 +95,28 @@ abstract class Page {
 class MovieListResponse extends Page {
   List<MovieList> results;
 
-  MovieListResponse({int page, this.results, int totalPages, int totalResults}) : super(page, totalPages, totalResults);
+  MovieListResponse({int page, this.results, int totalPages, int totalResults})
+      : super(page, totalPages, totalResults);
 
-  MovieListResponse.fromJSON(Map<String, dynamic> data): super(data['page'], data['total_pages'], data['total_results']) {
-    this.results = List<MovieList>.of(data['results'].map((item) => new MovieList.fromJSON(item)));
+  MovieListResponse.fromJSON(Map<String, dynamic> data)
+      : super(data['page'], data['total_pages'], data['total_results']) {
+    this.results = List<MovieList>.of(
+        data['results'].map((item) => new MovieList.fromJSON(item)));
   }
 }
 
 class FavoriteMovies extends Page {
   List<Movie> results;
 
-  FavoriteMovies({int page, this.results, int totalPages, int totalResults}) : super(page, totalPages, totalResults);
+  FavoriteMovies({int page, this.results, int totalPages, int totalResults})
+      : super(page, totalPages, totalResults);
 
-  FavoriteMovies.fromJSON(Map<String, dynamic> data): super(data['page'], data['total_pages'], data['total_results']){
-    this.results = List<Movie>.of(data['results'].map((item) => new Movie.fromJSON(item)));
+  FavoriteMovies.fromJSON(Map<String, dynamic> data)
+      : super(data['page'], data['total_pages'], data['total_results']) {
+    this.results =
+        List<Movie>.of(data['results'].map((item) => new Movie.fromJSON(item)));
   }
 }
-
 
 class Genre {
   int id;
@@ -158,12 +176,11 @@ class Keyword {
 
   Keyword({this.id, this.name});
 
-  Keyword.fromJSON(Map<String, dynamic> data){
+  Keyword.fromJSON(Map<String, dynamic> data) {
     this.id = data['id'];
     this.name = data['name'];
   }
 }
-
 
 class Network {
   String headquarters;
@@ -172,9 +189,14 @@ class Network {
   String name;
   String originCountry;
 
-  Network({this.headquarters, this.homepage, this.id, this.name, this.originCountry});
+  Network(
+      {this.headquarters,
+      this.homepage,
+      this.id,
+      this.name,
+      this.originCountry});
 
-  Network.fromJSON(Map<String, dynamic> data){
+  Network.fromJSON(Map<String, dynamic> data) {
     this.headquarters = data['headquarters'];
     this.homepage = data['homepage'];
     this.id = data['id'];
@@ -201,13 +223,12 @@ class NetworkAlternativeNames {
 
   NetworkAlternativeNames({this.id, this.results});
 
-  NetworkAlternativeNames.fromJSON(Map<String, dynamic> data){
+  NetworkAlternativeNames.fromJSON(Map<String, dynamic> data) {
     this.id = data['id'];
-    this.results = List<NetworkAlternativeName>.of(data['results'].map((val) => NetworkAlternativeName.fromJSON(val)));
+    this.results = List<NetworkAlternativeName>.of(
+        data['results'].map((val) => NetworkAlternativeName.fromJSON(val)));
   }
-
 }
-
 
 abstract class Image {
   num aspectRatio;
@@ -217,20 +238,29 @@ abstract class Image {
   num voteCount;
   int width;
 
-  Image(this.aspectRatio, this.filePath, this.height, this.voteAverage, this.voteCount, this.width);
+  Image(this.aspectRatio, this.filePath, this.height, this.voteAverage,
+      this.voteCount, this.width);
 }
-
 
 class Logo extends Image {
   String fileType;
 
-  Logo({num aspectRatio, String filePath, int height, num voteAverage, num voteCount, num width, this.fileType}) : super(aspectRatio, filePath, height, voteAverage, voteCount, width);
+  Logo(
+      {num aspectRatio,
+      String filePath,
+      int height,
+      num voteAverage,
+      num voteCount,
+      num width,
+      this.fileType})
+      : super(aspectRatio, filePath, height, voteAverage, voteCount, width);
 
-  Logo.fromJSON(Map<String, dynamic> data) : super(data['aspect_ratio'], data['file_path'], data['height'], data['vote_average'], data['vote_count'], data['width']){
+  Logo.fromJSON(Map<String, dynamic> data)
+      : super(data['aspect_ratio'], data['file_path'], data['height'],
+            data['vote_average'], data['vote_count'], data['width']) {
     this.fileType = data['file_type'];
   }
 }
-
 
 class Movie {
   // Reference: https://developers.themoviedb.org/3/movies/get-latest-movie
