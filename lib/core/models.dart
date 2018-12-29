@@ -1,22 +1,22 @@
 // Account models.
 
-class Gravater {
+class Gravatar {
   String hash;
 
-  Gravater({this.hash});
+  Gravatar({this.hash});
 
-  Gravater.fromJSON(Map<String, dynamic> data) {
+  Gravatar.fromJSON(Map<String, dynamic> data) {
     this.hash = data['hash'];
   }
 }
 
-class Avater {
-  Gravater gravater;
+class Avatar {
+  Gravatar gravatar;
 
-  Avater({this.gravater});
+  Avatar({this.gravatar});
 
-  Avater.fromJSON(Map<String, dynamic> data) {
-    this.gravater = new Gravater.fromJSON(data['gravater']);
+  Avatar.fromJSON(Map<String, dynamic> data) {
+    this.gravatar = new Gravatar.fromJSON(data['gravatar']);
   }
 }
 
@@ -24,7 +24,7 @@ class AccountDetail {
   // Account Details
   //
   // https://developers.themoviedb.org/3/account/get-account-details
-  Avater avater;
+  Avatar avatar;
   int id;
   String ISO_639_1;
   String ISO_3166_1;
@@ -33,7 +33,7 @@ class AccountDetail {
   String username;
 
   AccountDetail(
-      {this.avater,
+      {this.avatar,
       this.id,
       this.ISO_639_1,
       this.ISO_3166_1,
@@ -42,7 +42,7 @@ class AccountDetail {
       this.username});
 
   AccountDetail.fromJSON(Map<String, dynamic> data) {
-    this.avater = new Avater.fromJSON(data['avater']);
+    this.avatar = new Avatar.fromJSON(data['avatar']);
     this.id = data['id'];
     this.ISO_639_1 = data['iso_639_1'];
     this.ISO_3166_1 = data['iso_3166_1'];
