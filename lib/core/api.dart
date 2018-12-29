@@ -49,6 +49,9 @@ class TmdbApi {
   /// Do we use HTTPS?
   final bool _useHttps;
 
+  // language
+  String language;
+
   /// The session infromation that holds all the information of the session
   SessionInformation _sessionInformation;
 
@@ -59,17 +62,25 @@ class TmdbApi {
   @override
   String toString() => this._sessionInformation.toString();
 
-  TmdbApi(this._apiKey, [this._useHttps = true])
+  TmdbApi(this._apiKey, [this._useHttps = true, this.language = 'en-US'])
       : _baseUrl = "api.themoviedb.org/3";
 
+  String _buildParams(Map<String, String> params) {
+    if (params == null) {
+      return '';
+    }
+    params['language'] ??= this.language;
+    return params.keys.map((k) => "$k=${params[k]}").join('&');
+  }
+
   /// Builds a Tmdb URL with API key baked in.
-  _buildUrl([path = ""]) =>
-      "http${_useHttps ? "s" : ""}://${_baseUrl}${path}?api_key=${_apiKey}";
+  _buildUrl([path = "", params = null]) =>
+      "http${_useHttps ? "s" : ""}://${_baseUrl}${path}?api_key=${_apiKey}&${_buildParams(params)}";
 
   /// Performs a [http.get] and returns the response as a dart [Map]
-  Future<Map<String, dynamic>> mapFromGet(String path) async {
+  Future<Map<String, dynamic>> mapFromGet(String path, [params = null]) async {
     var _client = http.Client();
-    var response = await _client.get(_buildUrl(path));
+    var response = await _client.get(_buildUrl(path, params));
     _client.close();
 
     return jsonDecode(response.body);
@@ -164,5 +175,20 @@ class TmdbApi {
     return this
         .mapFromGet("/movie/${movieID}")
         .then((val) => new Movie.fromJSON(val));
+  }
+
+  Future<AccountDetail> getAccountDetail() async {
+    return this.mapFromGet("/account", {
+      'session_id': this.sessionInformation['sessionId']
+    }).then((val) => new AccountDetail.fromJSON(val));
+  }
+
+  Future<MovieListResponse> getMovieList(int id,
+      {String lang: '', int page: 1}) async {
+    return this.mapFromGet("/account/$id/lists", {
+      "language": lang,
+      "page": page,
+      "session_id": this.sessionInformation['sessionId']
+    }).then((val) => new MovieListResponse.fromJSON(val));
   }
 }
